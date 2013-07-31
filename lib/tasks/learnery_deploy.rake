@@ -26,6 +26,7 @@
       puts "deploying to heroku app \"#{app_name}\""
       remote_name = "headlessheroku"
       HerokuHeadless.configure do | config |
+        config.force_push = true
         config.post_deploy_commands = ['rake db:migrate']
         config.pre_deploy_git_commands = [
           "git config --global user.email \"drblinken@gmail.com\"",
@@ -34,7 +35,7 @@
           "git remote add #{remote_name} git@heroku.com:#{app_name}.git",
           "git add . ",
           "git commit -m \"version info from ci\" "
-         ]
+             ]
       end
 
       result = HerokuHeadless::Deployer.deploy( app_name )
