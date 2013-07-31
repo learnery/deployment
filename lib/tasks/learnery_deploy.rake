@@ -17,6 +17,11 @@
       puts "Please define #{required.join(", ")} as environment variables"
       exit 1
     end
+    versionkeys = %w(TRAVIS_BRANCH TRAVIS_BUILD_ID TRAVIS_BUILD_NUMBER TRAVIS_COMMIT TRAVIS_REPO_SLUG)
+    versionkeys.each do | key |
+      puts "#{key}: #{ENV[key]}"
+    end
+
 
     if ENV['TRAVIS_TEST_RESULT'] != "0"
       puts "There were errors in the build - skipping deploy."
