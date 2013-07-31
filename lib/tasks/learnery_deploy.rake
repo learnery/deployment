@@ -1,5 +1,6 @@
 
   require 'heroku-headless'
+  require 'fileutils'
   def deploy(application_name)
     #File.new("travis_job_number","w").write(ENV['TRAVIS_JOB_NUMBER'])
 
@@ -58,8 +59,13 @@ namespace :learnery do
     version = versionkeys.map do | key |
       "#{key}: #{ENV[key]}"
     end
-    version = version.join(", ")
-    puts version
+    #version = version.join(", ")
+    github_link = "https://github.com/#{ENV['TRAVIS_REPO_SLUG']}/commit/#{ENV['TRAVIS_COMMIT']}"
+    travis_link = "https://travis-ci.org/#{ENV['TRAVIS_REPO_SLUG']}/builds/#{ENV['TRAVIS_BUILD_ID']}"
+    version = "This is <a href=\"#{github_link}\">#{ENV['TRAVIS_REPO_SLUG']}@#{ENV['TRAVIS_COMMIT']}</a> Build <a href=\"#{travis_link}\">#{ENV['TRAVIS_BUILD_NUMBER']}</a>"
+    dir = 'app/views/learnery/version/'
+    FileUtils.mkdir_p(dir)
+    File.open(File.join(dir,'_version.html.erb'), 'w') { |file| file.write(version) }
     end
 end
 
