@@ -18,11 +18,6 @@
       puts "Please define #{required.join(", ")} as environment variables"
       exit 1
     end
-    versionkeys = %w(TRAVIS_BRANCH TRAVIS_BUILD_ID TRAVIS_BUILD_NUMBER TRAVIS_COMMIT TRAVIS_REPO_SLUG)
-    versionkeys.each do | key |
-      puts "#{key}: #{ENV[key]}"
-    end
-
     if ENV['TRAVIS_TEST_RESULT'] != "0"
       puts "There were errors in the build - skipping deploy."
     else
@@ -59,11 +54,6 @@ end
 namespace :learnery do
     desc "Write Version Info from Travis Env"
     task :version do
-    versionkeys = %w(TRAVIS_BRANCH TRAVIS_BUILD_ID TRAVIS_BUILD_NUMBER TRAVIS_COMMIT TRAVIS_REPO_SLUG)
-    version = versionkeys.map do | key |
-      "#{key}: #{ENV[key]}"
-    end
-    #version = version.join(", ")
     github_link = "https://github.com/#{ENV['TRAVIS_REPO_SLUG']}/commit/#{ENV['TRAVIS_COMMIT']}"
     travis_link = "https://travis-ci.org/#{ENV['TRAVIS_REPO_SLUG']}/builds/#{ENV['TRAVIS_BUILD_ID']}"
     version = "This is <a href=\"#{github_link}\">#{ENV['TRAVIS_REPO_SLUG']}@#{ENV['TRAVIS_COMMIT']}</a> Build <a href=\"#{travis_link}\">#{ENV['TRAVIS_BUILD_NUMBER']}</a>"
