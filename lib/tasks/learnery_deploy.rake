@@ -23,7 +23,6 @@
       puts "#{key}: #{ENV[key]}"
     end
 
-
     if ENV['TRAVIS_TEST_RESULT'] != "0"
       puts "There were errors in the build - skipping deploy."
     else
@@ -34,7 +33,12 @@
       HerokuHeadless.configure do | config |
         config.post_deploy_commands = ['rake db:migrate']
         config.pre_deploy_git_commands = [
-          "git remote add #{remote_name} git@heroku.com:#{app_name}.git"
+          "git config --global user.email \"drblinken@gmail.com\"",
+          "git config --global user.name \"Travis CI\"",
+          "git checkout master",
+          "git remote add #{remote_name} git@heroku.com:#{app_name}.git",
+          "git add . ",
+          "git commit -m \"version info from ci\" "
          ]
       end
 
