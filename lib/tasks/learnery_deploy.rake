@@ -51,15 +51,30 @@ namespace :learnery do
     end
 end
 
+VERSION_INFO_DIR='app/views/learnery/version/'
+VERSION_INFO_FILE='_version.html.erb'
+
+def write_version_info_file(version)
+    FileUtils.mkdir_p(VERSION_INFO_DIR)
+    File.open(File.join(VERSION_INFO_DIR,VERSION_INFO_FILE), 'w') { |file| file.write(version) }
+
+end
+
 namespace :learnery do
-    desc "Write Version Info from Travis Env"
-    task :version do
+  desc "Write Version Info from Travis Env"
+  task :version do
     github_link = "https://github.com/#{ENV['TRAVIS_REPO_SLUG']}/commit/#{ENV['TRAVIS_COMMIT']}"
     travis_link = "https://travis-ci.org/#{ENV['TRAVIS_REPO_SLUG']}/builds/#{ENV['TRAVIS_BUILD_ID']}"
-    version = "This is <a href=\"#{github_link}\">#{ENV['TRAVIS_REPO_SLUG']}@#{ENV['TRAVIS_COMMIT']}</a> Build <a href=\"#{travis_link}\">#{ENV['TRAVIS_BUILD_NUMBER']}</a>"
-    dir = 'app/views/learnery/version/'
-    FileUtils.mkdir_p(dir)
-    File.open(File.join(dir,'_version.html.erb'), 'w') { |file| file.write(version) }
-    end
+    version = "This is <a href=\"#{github_link}\">#{ENV['TRAVIS_REPO_SLUG']}@#{ENV['TRAVIS_COMMIT'][0..6]}</a> Build <a href=\"#{travis_link}\">#{ENV['TRAVIS_BUILD_NUMBER']}</a>"
+    write_version_info_file(version)
+  end
+end
+
+namespace :learnery do
+  desc "Overwrites Version Info"
+  task :versiondelete do
+  version = "(Deploy Script Generated Version Info Should Go Here"
+  write_version_info_file(version)
+  end
 end
 
