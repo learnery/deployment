@@ -50,3 +50,16 @@ namespace :learnery do
       deploy(args[:application_name])
     end
 end
+
+namespace :learnery do
+    desc "Write Version Info from Travis Env"
+    task :version do
+    versionkeys = %w(TRAVIS_BRANCH TRAVIS_BUILD_ID TRAVIS_BUILD_NUMBER TRAVIS_COMMIT TRAVIS_REPO_SLUG)
+    version = versionkeys.map do | key |
+      "#{key}: #{ENV[key]}"
+    end
+    version = version.join(", ")
+    puts version
+    end
+end
+
